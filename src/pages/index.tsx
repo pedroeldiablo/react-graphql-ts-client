@@ -15,45 +15,56 @@ import {DarkModeSwitch} from '../components/DarkModeSwitch';
 import {CTA} from '../components/CTA';
 import {Footer} from '../components/Footer';
 import {NavBar} from '../components/NavBar';
+import {usePostsQuery} from '../generated/graphql';
+import {createUrqlClient} from '../utils/createUrqlClient';
+import {withUrqlClient} from 'next-urql';
 
-const Index = () => (
-  <Container height="100vh">
-    <NavBar />
-    <Hero />
-    <Main>
-      <Text>
+const Index = () => {
+  const [{data}] = usePostsQuery();
+  return (
+    <Container height="100vh">
+      <NavBar />
+      {!data ? (
+        <div>loading...</div>
+        ) : (
+          data.posts.map((p) => <div key={p.id}>{p.title}</div>)
+          )}
+      <Hero />
+      <Main>
+        <Text>
         Example repository of <Code>Next.js</Code>
          + <Code>chakra-ui</Code> +{' '}
-        <Code>typescript</Code>.
-      </Text>
+          <Code>typescript</Code>.
+        </Text>
 
-      <List spacing={3} my={0}>
-        <ListItem>
-          <ListIcon as={CheckCircleIcon} color="green.500" />
-          <ChakraLink
-            isExternal
-            href="https://chakra-ui.com"
-            flexGrow={1}
-            mr={2}
-          >
+        <List spacing={3} my={0}>
+          <ListItem>
+            <ListIcon as={CheckCircleIcon} color="green.500" />
+            <ChakraLink
+              isExternal
+              href="https://chakra-ui.com"
+              flexGrow={1}
+              mr={2}
+            >
             Chakra UI <LinkIcon />
-          </ChakraLink>
-        </ListItem>
-        <ListItem>
-          <ListIcon as={CheckCircleIcon} color="green.500" />
-          <ChakraLink isExternal href="https://nextjs.org" flexGrow={1} mr={2}>
+            </ChakraLink>
+          </ListItem>
+          <ListItem>
+            <ListIcon as={CheckCircleIcon} color="green.500" />
+            <ChakraLink isExternal href="https://nextjs.org" flexGrow={1} mr={2}>
             Next.js <LinkIcon />
-          </ChakraLink>
-        </ListItem>
-      </List>
-    </Main>
+            </ChakraLink>
+          </ListItem>
+        </List>
+      </Main>
 
-    <DarkModeSwitch />
-    <Footer>
-      <Text>Next ❤️ Chakra</Text>
-    </Footer>
-    <CTA />
-  </Container>
-);
+      <DarkModeSwitch />
+      <Footer>
+        <Text>Next ❤️ Chakra</Text>
+      </Footer>
+      <CTA />
+    </Container>
+  );
+};
 
-export default Index;
+export default withUrqlClient(createUrqlClient, {ssr: true})(Index);

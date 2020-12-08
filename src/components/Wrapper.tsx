@@ -1,6 +1,6 @@
 import {Box} from '@chakra-ui/core';
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 export type WrapperVariant = 'small' | 'regular';
 

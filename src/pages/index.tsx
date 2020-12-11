@@ -1,11 +1,14 @@
 import {
-  Code, Link as ChakraLink, Link, List,
+  Box,
+  Button,
+  Code, Flex, Heading, Link as ChakraLink, Link, List,
   ListIcon,
-  ListItem, Text,
+  ListItem, Stack, Text,
 } from '@chakra-ui/core';
 import {CheckCircleIcon, LinkIcon} from '@chakra-ui/icons';
 import {withUrqlClient} from 'next-urql';
 import NextLink from 'next/link';
+import React from 'react';
 import {Container} from '../components/Container';
 import {CTA} from '../components/CTA';
 import {DarkModeSwitch} from '../components/DarkModeSwitch';
@@ -18,22 +21,51 @@ import {createUrqlClient} from '../utils/createUrqlClient';
 
 
 const Index = () => {
-  const [{data}] = usePostsQuery({
+  const [{data, fetching}] = usePostsQuery({
     variables: {
       limit: 10,
     },
   });
+
+  // TODOS handle this more eligantly
+  if (!fetching && !data) {
+    return <div>your query failed for some reason</div>;
+  }
+
   return (
     <Container height="100vh">
       <Layout>
-        {!data ? (
+        {fetching && !data ? (
         <div>loading...</div>
         ) : (
-          data.posts.map((p) => <div key={p.id}>{p.title}</div>)
+          <>
+            <Flex align="center">
+              <Heading>Postdit</Heading>
+              <NextLink href="/create-post">
+                <Link ml="auto">create post</Link>
+              </NextLink>
+            </Flex>
+            {/* <NextLink href="/create-post">
+              <Link>create post</Link>
+            </NextLink> */}
+            <br/>
+            <Stack spacing={8}>
+              {data!.posts.map((p) => (
+                <Box key={p.id} p={5} shadow="md" borderWidth="1px">
+                  <Heading fontSize="xl">{p.title}</Heading>
+                  <Text mt={4}>{p.textSnippet}</Text>
+                </Box>
+              ))}
+            </Stack>
+          </>
           )}
-        <NextLink href="/create-post">
-          <Link>create post</Link>
-        </NextLink>
+        {data ? (
+        <Flex>
+          <Button isLoading={fetching} m="auto" my={8}>
+            load more
+          </Button>
+        </Flex>
+      ) : null}
         <Hero />
         <Main>
           <Text>

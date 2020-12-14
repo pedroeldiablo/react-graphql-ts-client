@@ -1,4 +1,4 @@
-import {dedupExchange, Exchange, fetchExchange} from 'urql';
+import {dedupExchange, Exchange, fetchExchange, stringifyVariables} from 'urql';
 import {pipe, tap} from 'wonka';
 import {cacheExchange, Resolver} from '@urql/exchange-graphcache';
 import {
@@ -22,9 +22,7 @@ const errorExchange: Exchange = ({forward}) => (ops$) => {
   );
 };
 
-export const cursorPagination = (
-    cursorArgument = 'cursor',
-): Resolver => {
+export const cursorPagination = (): Resolver => {
   return (_parent, fieldArgs, cache, info) => {
     const {parentKey: entityKey, fieldName} = info;
     console.log(entityKey, fieldName);
@@ -35,6 +33,19 @@ export const cursorPagination = (
     if (size === 0) {
       return undefined;
     }
+
+    const fieldKey = `${fieldName}(${stringifyVariables(fieldArgs)})`;
+    const isItInTheCache = cache.resolveFieldByKey(entityKey, fieldKey);
+    info.partial = !isItInTheCache;
+
+    const results: string[] = [];
+    fieldInfos.forEach((fi) => {
+      const data = cache.resolveFieldByKey(entityKey, fi.fieldKey) as string[];
+      console.log(data);
+      results.push(...data);
+    });
+
+    return results;
 
     // const visited = new Set();
     // let result: NullArray<string> = [];

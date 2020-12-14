@@ -8,7 +8,7 @@ import {
 import {CheckCircleIcon, LinkIcon} from '@chakra-ui/icons';
 import {withUrqlClient} from 'next-urql';
 import NextLink from 'next/link';
-import React from 'react';
+import React, {useState} from 'react';
 import {Container} from '../components/Container';
 import {CTA} from '../components/CTA';
 import {DarkModeSwitch} from '../components/DarkModeSwitch';
@@ -21,10 +21,15 @@ import {createUrqlClient} from '../utils/createUrqlClient';
 
 
 const Index = () => {
+  const [variables, setVariables] = useState({
+    limit: 10,
+    cursor: null as null | string,
+  });
+
+  console.log(variables);
+
   const [{data, fetching}] = usePostsQuery({
-    variables: {
-      limit: 10,
-    },
+    variables,
   });
 
   // TODOS handle this more eligantly
@@ -61,8 +66,18 @@ const Index = () => {
           )}
         {data ? (
         <Flex>
-          <Button isLoading={fetching} m="auto" my={8}>
-            load more
+          <Button
+            onClick={() => {
+              setVariables({
+                limit: variables.limit,
+                cursor: data.posts[data.posts.length - 1].createdAt,
+              });
+            }}
+            isLoading={fetching}
+            m="auto"
+            my={8}
+          >
+             load more
           </Button>
         </Flex>
       ) : null}

@@ -10,7 +10,7 @@ import {withUrqlClient} from 'next-urql';
 import NextLink from 'next/link';
 import React, {useState} from 'react';
 import {Container} from '../components/Container';
-import {CTA} from '../components/CTA';
+// import {CTA} from '../components/CTA';
 import {DarkModeSwitch} from '../components/DarkModeSwitch';
 import {Footer} from '../components/Footer';
 import {Hero} from '../components/Hero';

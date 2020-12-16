@@ -1,9 +1,16 @@
 import {
   Box,
   Button,
-  Code, Flex, Heading, Link as ChakraLink, Link, List,
+  Code,
+  Flex,
+  Heading,
+  Link as ChakraLink,
+  Link,
+  List,
   ListIcon,
-  ListItem, Stack, Text,
+  ListItem,
+  Stack,
+  Text,
 } from '@chakra-ui/core';
 import {CheckCircleIcon, LinkIcon} from '@chakra-ui/icons';
 import {withUrqlClient} from 'next-urql';
@@ -16,6 +23,7 @@ import {Footer} from '../components/Footer';
 import {Hero} from '../components/Hero';
 import {Layout} from '../components/Layout';
 import {Main} from '../components/Main';
+import {UpdootSection} from '../components/UpdootSection';
 import {usePostsQuery} from '../generated/graphql';
 import {createUrqlClient} from '../utils/createUrqlClient';
 
@@ -56,11 +64,14 @@ const Index = () => {
             <br/>
             <Stack spacing={8}>
               {data!.posts.posts.map((p) => (
-                <Box key={p.id} p={5} shadow="md" borderWidth="1px">
-                  <Heading fontSize="xl">{p.title}</Heading>{' '}
-                  <Text>posted by {p.creator.username}</Text>
-                  <Text mt={4}>{p.textSnippet}</Text>
-                </Box>
+                <Flex key={p.id} p={5} shadow="md" borderWidth="1px">
+                  <UpdootSection post={p} />
+                  <Box>
+                    <Heading fontSize="xl">{p.title}</Heading>
+                    <Text>posted by {p.creator.username}</Text>
+                    <Text mt={4}>{p.textSnippet}</Text>
+                  </Box>
+                </Flex>
               ))}
             </Stack>
           </>

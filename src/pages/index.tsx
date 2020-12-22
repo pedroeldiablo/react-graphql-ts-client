@@ -46,7 +46,7 @@ const Index = () => {
   }
 
   return (
-    <Container height="100vh">
+    <Container min-height="100vh">
       <Layout>
         {fetching && !data ? (
         <div>loading...</div>

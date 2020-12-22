@@ -13,6 +13,7 @@ import {
   MeQuery,
   RegisterMutation,
   VoteMutationVariables,
+  DeletePostMutationVariables,
 } from '../generated/graphql';
 import {betterUpdateQuery} from './betterUpdateQuery';
 import Router from 'next/router';
@@ -148,6 +149,12 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
         },
         updates: {
           Mutation: {
+            deletePost: (_result, args, cache, _info) => {
+              cache.invalidate({
+                __typename: 'Post',
+                id: (args as DeletePostMutationVariables).id,
+              });
+            },
             vote: (_result, args, cache, _info) => {
               const {postId, value} = args as VoteMutationVariables;
               const data = cache.readFragment(

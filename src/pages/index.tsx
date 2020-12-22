@@ -52,16 +52,6 @@ const Index = () => {
         <div>loading...</div>
         ) : (
           <>
-            <Flex align="center">
-              <Heading>Postdit</Heading>
-              <NextLink href="/create-post">
-                <Link ml="auto">create post</Link>
-              </NextLink>
-            </Flex>
-            {/* <NextLink href="/create-post">
-              <Link>create post</Link>
-            </NextLink> */}
-            <br/>
             <Stack spacing={8}>
               {data!.posts.posts.map((p) => (
                 <Flex key={p.id} p={5} shadow="md" borderWidth="1px">

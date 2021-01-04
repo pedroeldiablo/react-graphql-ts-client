@@ -16,7 +16,7 @@
         "ecmaVersion": 12,
         "sourceType": "module"
     },
-    "ignorePatterns": [ "**/migrations/*.ts", "src/migrations/*.ts", "dist"],
+    "ignorePatterns": [ "**/migrations/*.ts", "src/migrations/*.ts", "**/generated/*.tsx", "dist"],
     "plugins": [
         "react",
         "@typescript-eslint"

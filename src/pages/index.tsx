@@ -36,12 +36,17 @@ const Index = () => {
 
   console.log(variables);
 
-  const [{data, fetching}] = usePostsQuery({
+  const [{data, error, fetching}] = usePostsQuery({
     variables,
   });
   // TODOS handle this more eligantly
   if (!fetching && !data) {
-    return <div>your query failed for some reason</div>;
+    return (
+      <div>
+        <div>you got query failed for some reason</div>
+        <div>{error?.message}</div>
+      </div>
+    );
   }
 
   return (

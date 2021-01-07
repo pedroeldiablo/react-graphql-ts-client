@@ -1,5 +1,5 @@
 import {Link as ChakraLink, Button} from '@chakra-ui/core';
-
+import React from 'react';
 import {Container} from './Container';
 
 export const CTA = () => (
